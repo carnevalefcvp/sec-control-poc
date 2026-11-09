@@ -1,0 +1,22 @@
+{
+  "name": "sec-control-poc",
+  "version": "1.0.0",
+  "description": "Prova de Conceito (PoC) - SEC-CONTROL: Plataforma de Controle Administrativo e Quadro de Trabalho Semanal (QTS)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "QTS",
+    "Governanca-TI",
+    "Auditoria",
+    "Senac",
+    "Projeto-Integrador"
+  ],
+  "author": "Flavia Biagioni, Felipe Pereira, Leonardo Vargas, Matheus Silva, Miryam Souza",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.7"
+  }
+}

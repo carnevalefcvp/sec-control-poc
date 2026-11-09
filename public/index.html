@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEC-CONTROL | Plataforma QTS e Auditoria (PoC)</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f0f2f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .navbar-sec {
+      background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+      border-bottom: 3px solid #3b82f6;
+    }
+    .card-panel {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+    /* Moldura do Dispositivo Móvel do Operador Rafael */
+    .mobile-frame {
+      max-width: 390px;
+      margin: 0 auto;
+      background-color: #111827;
+      border: 10px solid #1f2937;
+      border-radius: 36px;
+      padding: 18px;
+      color: #f9fafb;
+      min-height: 680px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+    }
+    .mobile-notch {
+      width: 110px;
+      height: 18px;
+      background-color: #1f2937;
+      margin: -18px auto 15px auto;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+    .mission-card-mobile {
+      background-color: #1e293b;
+      border-left: 4px solid #f59e0b;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .mission-card-mobile.concluida {
+      border-left-color: #10b981;
+      opacity: 0.85;
+    }
+    .hash-badge {
+      font-family: monospace;
+      font-size: 0.78rem;
+      background-color: #e2e8f0;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de Navegação Superior -->
+  <nav class="navbar navbar-dark navbar-sec py-3 mb-4">
+    <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
+      <div>
+        <span class="navbar-brand mb-0 h4 fw-bold text-white">🛡️ SEC-CONTROL</span>
+        <span class="badge bg-primary ms-2">PoC - 2ª Etapa Senac</span>
+      </div>
+      <div class="text-light small">
+        Quadro de Trabalho Semanal (QTS) & Governança de TI
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4 pb-5">
+    <div class="row g-4">
+
+      <!-- COLUNA ESQUERDA: AMBIENTE WEB ADMINISTRATIVO (PERSONA: CARLOS) -->
+      <div class="col-lg-8">
+        <div class="card card-panel mb-4">
+          <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="mb-0 fw-bold text-dark">💻 Painel Web Administrativo — Gestão de QTS</h5>
+              <small class="text-muted">Usuário Autenticado: <strong>Carlos (Supervisor de Planejamento Operacional)</strong> | Manaus/AM</small>
+            </div>
+            <span class="badge bg-dark">Perfil: GESTOR (Alto Poder / Alta Influência)</span>
+          </div>
+          <div class="card-body">
+
+            <!-- Indicadores Rápidos (Dashboard) -->
+            <div class="row text-center mb-4 g-2">
+              <div class="col-4">
+                <div class="p-3 bg-light rounded border">
+                  <div class="text-muted small">Total de Escalas (QTS)</div>
+                  <h3 class="fw-bold mb-0 text-primary" id="kpi-total">0</h3>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="p-3 bg-light rounded border">
+                  <div class="text-muted small">Pendentes em Campo</div>
+                  <h3 class="fw-bold mb-0 text-warning" id="kpi-pendentes">0</h3>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="p-3 bg-light rounded border">
+                  <div class="text-muted small">Missões Concluídas</div>
+                  <h3 class="fw-bold mb-0 text-success" id="kpi-concluidas">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <!-- Formulário de Cadastro de Missão no QTS -->
+            <h6 class="fw-bold text-secondary mb-3">➕ Publicar Nova Tarefa no Quadro de Trabalho Semanal (QTS)</h6>
+            <form id="form-qts" class="row g-3 mb-4 p-3 bg-light rounded border">
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Título da Missão</label>
+                <input type="text" id="titulo" class="form-control form-control-sm" placeholder="Ex: Escolta e Patrulha Tática Setor Sul" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Operador Designado</label>
+                <select id="operador_nome" class="form-select form-select-sm" required>
+                  <option value="Rafael (Agente Operacional)">Rafael (Agente Operacional - Mobile)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Local / Posto Operacional</label>
+                <input type="text" id="local" class="form-control form-control-sm" placeholder="Ex: Posto Avançado 03 - Manaus/AM" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-semibold">Dia e Horário do Turno</label>
+                <input type="text" id="horario_turno" class="form-control form-control-sm" placeholder="Ex: Terça-feira | 14:00 às 18:00" required />
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-semibold">Instruções Táticas da Missão</label>
+                <textarea id="descricao_tatica" class="form-control form-control-sm" rows="2" placeholder="Descreva os procedimentos de execução obrigatórios..." required></textarea>
+              </div>
+              <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary btn-sm px-4 fw-semibold">
+                  Publicar no QTS e Gerar Log de Auditoria
+                </button>
+              </div>
+            </form>
+
+            <!-- Tabela de Monitoramento de Escalas em Tempo Real -->
+            <h6 class="fw-bold text-secondary mb-2">📊 Monitoramento de Escalas em Tempo Real</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-hover align-middle border">
+                <thead class="table-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Missão / Local</th>
+                    <th>Turno</th>
+                    <th>Operador</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tabela-missoes"></tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- PAINEL DE TRILHA DE AUDITORIA (GOVERNANÇA DE TI) -->
+        <div class="card card-panel">
+          <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="mb-0 fw-bold text-dark">🔒 Trilha de Auditoria Imutável (ISO 27001 / Governança de TI)</h6>
+              <small class="text-muted">Rastreamento automático de inclusões e execuções com assinatura SHA-256</small>
+            </div>
+            <span class="badge bg-secondary">Equipe de TI / Auditores</span>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-sm table-striped mb-0 small">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Data/Hora</th>
+                    <th>Autor</th>
+                    <th>Ação</th>
+                    <th>Detalhes do Evento</th>
+                    <th>Hash SHA-256</th>
+                  </tr>
+                </thead>
+                <tbody id="tabela-logs"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUNA DIREITA: APLICATIVO MÓVEL (PERSONA: RAFAEL) -->
+      <div class="col-lg-4">
+        <div class="mobile-frame">
+          <div class="mobile-notch"></div>
+          <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3">
+            <div>
+              <div class="fw-bold text-info">📱 SEC-CONTROL Mobile</div>
+              <div style="font-size: 0.75rem;" class="text-secondary">Agente: <strong>Rafael (24 anos)</strong></div>
+            </div>
+            <span class="badge bg-success" style="font-size: 0.7rem;">Online • 5G</span>
+          </div>
+
+          <!-- Alerta de Notificação Push -->
+          <div id="push-banner" class="alert alert-info py-2 px-3 small mb-3" style="font-size: 0.8rem;">
+            🔔 <strong>Push Ativo:</strong> Sua escala individual QTS está sincronizada em tempo real.
+          </div>
+
+          <div class="small text-uppercase text-secondary fw-bold mb-2" style="font-size: 0.72rem;">
+            Minhas Missões Designadas (QTS)
+          </div>
+
+          <!-- Lista de Cartões Mobile -->
+          <div id="lista-mobile"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    async function carregarDados() {
+      const resposta = await fetch('/api/dados');
+      const { missoes, logs } = await resposta.json();
+
+      // Atualiza KPIs
+      const total = missoes.length;
+      const concluidas = missoes.filter(m => m.status === 'CONCLUIDA').length;
+      const pendentes = total - concluidas;
+
+      document.getElementById('kpi-total').innerText = total;
+      document.getElementById('kpi-pendentes').innerText = pendentes;
+      document.getElementById('kpi-concluidas').innerText = concluidas;
+
+      // Atualiza Tabela Web do Gestor Carlos
+      const tbodyMissoes = document.getElementById('tabela-missoes');
+      tbodyMissoes.innerHTML = missoes.map(m => `
+        <tr>
+          <td class="fw-bold">#${m.id}</td>
+          <td>
+            <div class="fw-semibold">${m.titulo}</div>
+            <div class="text-muted small">📍 ${m.local}</div>
+          </td>
+          <td class="small">${m.horario_turno}</td>
+          <td class="small">${m.operador_nome}</td>
+          <td>
+            ${m.status === 'CONCLUIDA'
+              ? `<span class="badge bg-success">CONCLUÍDA (${m.concluido_em})</span>`
+              : `<span class="badge bg-warning text-dark">PENDENTE EM CAMPO</span>`}
+          </td>
+        </tr>
+      `).join('');
+
+      // Atualiza Tela Mobile do Operador Rafael
+      const listaMobile = document.getElementById('lista-mobile');
+      listaMobile.innerHTML = missoes.map(m => `
+        <div class="mission-card-mobile ${m.status === 'CONCLUIDA' ? 'concluida' : ''}">
+          <div class="d-flex justify-content-between align-items-start mb-1">
+            <span class="fw-bold text-white" style="font-size: 0.9rem;">#${m.id} - ${m.titulo}</span>
+            <span class="badge ${m.status === 'CONCLUIDA' ? 'bg-success' : 'bg-warning text-dark'}" style="font-size: 0.65rem;">
+              ${m.status}
+            </span>
+          </div>
+          <div class="text-info mb-1" style="font-size: 0.75rem;">📍 ${m.local}</div>
+          <div class="text-light mb-2" style="font-size: 0.75rem;">⏰ ${m.horario_turno}</div>
+          <div class="p-2 rounded bg-dark text-secondary mb-2" style="font-size: 0.75rem;">
+            <strong>Instrução Tática:</strong> ${m.descricao_tatica}
+          </div>
+          ${m.status === 'PENDENTE'
+            ? `<button onclick="concluirMissao(${m.id})" class="btn btn-success btn-sm w-100 fw-bold">
+                 ✔️ Concluir Tarefa
+               </button>`
+            : `<div class="text-success small fw-semibold text-center">
+                 Sincronizado em ${m.concluido_em}
+               </div>`
+          }
+        </div>
+      `).join('');
+
+      // Atualiza Tabela de Logs de Auditoria
+      const tbodyLogs = document.getElementById('tabela-logs');
+      tbodyLogs.innerHTML = logs.map(l => `
+        <tr>
+          <td class="text-nowrap">${l.data_hora}</td>
+          <td class="fw-semibold">${l.usuario_nome}</td>
+          <td>
+            <span class="badge ${l.acao === 'CRIACAO_MISSAO' ? 'bg-primary' : 'bg-success'}">
+              ${l.acao}
+            </span>
+          </td>
+          <td>${l.detalhes}</td>
+          <td><span class="hash-badge">${l.hash_integridade}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // Submissão de Nova Escala QTS (Visão de Carlos)
+    document.getElementById('form-qts').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        titulo: document.getElementById('titulo').value,
+        operador_nome: document.getElementById('operador_nome').value,
+        local: document.getElementById('local').value,
+        horario_turno: document.getElementById('horario_turno').value,
+        descricao_tatica: document.getElementById('descricao_tatica').value
+      };
+
+      await fetch('/api/missoes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      document.getElementById('form-qts').reset();
+      document.getElementById('push-banner').innerHTML = '🔔 <strong>Nova Notificação Push:</strong> Novo QTS publicado pelo Supervisor Carlos!';
+      carregarDados();
+    });
+
+    // Conclusão de Tarefa em Campo (Visão de Rafael)
+    async function concluirMissao(id) {
+      await fetch(`/api/missoes/${id}/concluir`, { method: 'PATCH' });
+      document.getElementById('push-banner').innerHTML = `✅ <strong>Sincronizado:</strong> Missão #${id} auditada no servidor central!`;
+      carregarDados();
+    }
+
+    carregarDados();
+  </script>
+</body>
+</html>
