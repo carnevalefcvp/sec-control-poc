@@ -36,7 +36,7 @@ Nesta **Prova de Conceito (PoC)**, validamos a jornada integrada entre:
 
 ### 1. Clonar o repositório
 ```bash
-git clone https://github.com/SEU-USUARIO/sec-control-poc.git
+git clone https://github.com/carnevalefcvp/sec-control-poc.git
 cd sec-control-poc
 ```
 
